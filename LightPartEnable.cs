@@ -10,8 +10,8 @@ public class LightPartEnable : MonoBehaviour
     private int CurrentNotValidNum;
     public GameObject LightManager;
 
-    int PMChildCount;
-    bool AllValid;
+    int PMChildCount, CollisionNum;
+    bool LineValid;
 
     // Start is called before the first frame update
     void Start()
@@ -23,17 +23,23 @@ public class LightPartEnable : MonoBehaviour
     void Update()
     {
         PMChildCount = this.transform.childCount;
+        //LineValid = this.GetComponent<ClonePlane>().LineCollision;
+        //CollisionNum = this.GetComponent<ClonePlane>().LineCollisionNum;
+        Debug.Log("Line ID: " + LineValid + " NUM: " + CollisionNum);
 
         for(int i = 0; i < PMChildCount; i ++)
         {
             bool val = this.gameObject.transform.GetChild(i).gameObject.GetComponent<DroneSizeButtonDistance>().DroneValid;
-            if((val == false) && i > 0)
+            if((val == false) && (i > 0) /*||( (i > 0) && CollisionNum != -1 (LineValid == false))*/ )
             {
                 LightSetNOTActive(i);
+                //if(CollisionNum >= 0) LightSetNOTActive(CollisionNum);
+                Debug.Log("FFFFFF");
             }
-            else if((val == true) && i > 0)
+            else if((val == true) && (i > 0 ) /*&& (LineValid == true)*/) 
             {
                 LightSetActive(i);
+                Debug.Log("OOOOOO");
             }
 
            
