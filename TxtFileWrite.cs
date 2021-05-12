@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.UI;   
 
 
 public class TxtFileWrite : MonoBehaviour
@@ -13,7 +14,7 @@ public class TxtFileWrite : MonoBehaviour
     public string NameID;
     public GameObject PM;
     float StartTime, DoneTime, CompleteTime, distance;
-    string ChooseScale;
+    string ChooseScale, NowDateTime;
     bool StartFlag = true;
     bool DoneFlag = true;
     int WayPointNum = 0;
@@ -22,6 +23,7 @@ public class TxtFileWrite : MonoBehaviour
     void Start()
     {
         FileInfo file = new FileInfo(Application.dataPath + "/mytxt.txt");
+        NowDateTime = System.DateTime.Now.ToString();
 
     }
 
@@ -61,7 +63,7 @@ public class TxtFileWrite : MonoBehaviour
             }
 
             //Debug.Log("Finish Time is " + CompleteTime);
-            msg = "Name: " + NameID + " , Scale: " + ChooseScale + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance;
+            msg = "Date Time: " + NowDateTime +" , Name: " + NameID + " , Scale: " + ChooseScale + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance;
             Debug.Log(msg);
             WriteData(msg);
         }
