@@ -25,7 +25,7 @@ public class RangeGeneratorManager : MonoBehaviour
     {
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         //lineRenderer.material = LineMat1;
-        lineRenderer.SetWidth(0.05f, 0.05f);
+        lineRenderer.SetWidth(0.03f, 0.03f);
     }
 
     // Update is called once per frame
@@ -47,16 +47,16 @@ public class RangeGeneratorManager : MonoBehaviour
             //Debug.Log("NORMAL is " + hit.normal);
             //Debug.DrawRay(Obj1.transform.position, hit.normal, Color.white);
 
-
+            Vector3 StartPoint = hit.point - new Vector3(0f, 0f, 0.01f);
             /* Start to Draw the Square*/
             if(SquareFlag == true)
             {
                 
-                lineRenderer.SetPosition(0, hit.point);
-                lineRenderer.SetPosition(1, hit.point + new Vector3( 2.0f, 0, 0));
-                lineRenderer.SetPosition(2, hit.point + new Vector3( 2.0f, 1.0f, 0));
-                lineRenderer.SetPosition(3, hit.point + new Vector3( 0, 1.0f, 0));
-                lineRenderer.SetPosition(4, hit.point);
+                lineRenderer.SetPosition(0, StartPoint);
+                lineRenderer.SetPosition(1, StartPoint + new Vector3( 2.0f, 0, 0));
+                lineRenderer.SetPosition(2, StartPoint + new Vector3( 2.0f, 1.0f, 0));
+                lineRenderer.SetPosition(3, StartPoint + new Vector3( 0, 1.0f, 0));
+                lineRenderer.SetPosition(4, StartPoint);
 
                 SquareFlag = false;
             }
