@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.UI;   
+using System.Diagnostics;
+
+using Debug = UnityEngine.Debug;
 
 
 public class TxtFileWrite : MonoBehaviour
@@ -12,7 +15,7 @@ public class TxtFileWrite : MonoBehaviour
     List<string> allData;
 
     public string NameID;
-    public GameObject PM;
+    public GameObject PM, PosButtonCollection;
     float StartTime, DoneTime, CompleteTime, distance;
     string ChooseScale, NowDateTime;
     bool StartFlag = true;
@@ -23,6 +26,7 @@ public class TxtFileWrite : MonoBehaviour
     void Start()
     {
         FileInfo file = new FileInfo(Application.dataPath + "/mytxt.txt");
+        Debug.Log("OPEN FILE: " + file.ToString());
         NowDateTime = System.DateTime.Now.ToString();
 
     }
@@ -65,7 +69,10 @@ public class TxtFileWrite : MonoBehaviour
             //Debug.Log("Finish Time is " + CompleteTime);
             msg = "Date Time: " + NowDateTime +" , Name: " + NameID + " , Scale: " + ChooseScale + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance;
             Debug.Log(msg);
-            WriteData(msg);
+            //WriteData(msg);
+            
+            Invoke("ButtonSetActive", 1.0f);
+            Invoke("CapturePicture", 5.0f);
         }
     
 
@@ -86,6 +93,21 @@ public class TxtFileWrite : MonoBehaviour
         writer.Flush();
         writer.Dispose();
         writer.Close();
+    }
+
+
+    void CapturePicture()
+    {
+        ScreenCapture.CaptureScreenshot(Application.dataPath + "/fileName01.png"); 
+    }
+
+    void ButtonSetActive()
+    {
+        int ChildCount = PosButtonCollection.transform.childCount;
+        for(int i = 0; i < ChildCount; i ++)
+        {
+            PosButtonCollection.gameObject.transform.GetChild(i).gameObject.SetActive(false);
+        }
     }
 
     
