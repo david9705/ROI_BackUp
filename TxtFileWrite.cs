@@ -33,6 +33,7 @@ public class TxtFileWrite : MonoBehaviour
         FileInfo file = new FileInfo(Application.dataPath + "/mytxt.txt");
         Debug.Log("OPEN FILE: " + file.ToString());
         NowDateTime = System.DateTime.Now.ToString();
+        PATH = Application.dataPath + "/" + NameID +".png" ;
 
     }
 
@@ -76,12 +77,25 @@ public class TxtFileWrite : MonoBehaviour
             Debug.Log(msg);
             //WriteData(msg);
             
+            Debug.Log("AAAAAAA");
             Invoke("ButtonSetActive", 1.0f);
-            Invoke("CapturePicture", 5.0f);
-            PATH = Application.dataPath + "/fileName01.png" ;
 
-            Invoke("JustDelay", 5.0f);
-            CallPythonOpenCV(basePath+ "GetScore.py", PATH);
+            Debug.Log("BBBBBBB");
+            Invoke("CapturePicture", 5.0f);
+
+
+           
+
+            /*if (System.IO.File.Exists(PATH))
+            {
+                //Invoke("JustDelay", 5.0f);
+                CallPythonOpenCV(basePath+ "GetScore.py", PATH);
+            }*/
+
+
+            Invoke("NoAuguCallPython", 10.0f);
+
+            
 
 
         }
@@ -109,7 +123,7 @@ public class TxtFileWrite : MonoBehaviour
 
     void CapturePicture()
     {
-        ScreenCapture.CaptureScreenshot(Application.dataPath + "/fileName01.png"); 
+        ScreenCapture.CaptureScreenshot(Application.dataPath + "/" + NameID +".png"); 
     }
 
     void ButtonSetActive()
@@ -175,10 +189,9 @@ public class TxtFileWrite : MonoBehaviour
         }
     }
 
-    void JustDelay()
+    void NoAuguCallPython()
     {
-        int f = 30, i = 0;
-        while(i < 30) i++;
+        CallPythonOpenCV(basePath+ "GetScore.py", PATH);
     }
     
     
