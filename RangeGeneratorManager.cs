@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum RangeType
+{
+    Fat,
+    Tall
+};
+
 public class RangeGeneratorManager : MonoBehaviour
 {
 
@@ -18,6 +25,10 @@ public class RangeGeneratorManager : MonoBehaviour
 
     [SerializeField]
     private Material LineMat1;
+
+
+    [SerializeField]
+    public RangeType RangeType;
 
 
     // Start is called before the first frame update
@@ -51,12 +62,24 @@ public class RangeGeneratorManager : MonoBehaviour
             /* Start to Draw the Square*/
             if(SquareFlag == true)
             {
+                if(RangeType == RangeType.Fat)
+                {
+                    lineRenderer.SetPosition(0, StartPoint);
+                    lineRenderer.SetPosition(1, StartPoint - new Vector3( 2.0f, 0, 0));
+                    lineRenderer.SetPosition(2, StartPoint - new Vector3( 2.0f, -1.0f, 0));
+                    lineRenderer.SetPosition(3, StartPoint + new Vector3( 0, 1.0f, 0));
+                    lineRenderer.SetPosition(4, StartPoint);
+                }
+                else if(RangeType == RangeType.Tall)
+                {
+                    lineRenderer.SetPosition(0, StartPoint);
+                    lineRenderer.SetPosition(1, StartPoint - new Vector3( 1.0f, 0, 0));
+                    lineRenderer.SetPosition(2, StartPoint - new Vector3( 1.0f, -2.0f, 0));
+                    lineRenderer.SetPosition(3, StartPoint + new Vector3( 0, 2.0f, 0));
+                    lineRenderer.SetPosition(4, StartPoint);   
+                }
+
                 
-                lineRenderer.SetPosition(0, StartPoint);
-                lineRenderer.SetPosition(1, StartPoint + new Vector3( 2.0f, 0, 0));
-                lineRenderer.SetPosition(2, StartPoint + new Vector3( 2.0f, 1.0f, 0));
-                lineRenderer.SetPosition(3, StartPoint + new Vector3( 0, 1.0f, 0));
-                lineRenderer.SetPosition(4, StartPoint);
 
                 SquareFlag = false;
             }
