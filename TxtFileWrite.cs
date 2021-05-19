@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -13,6 +13,9 @@ public class TxtFileWrite : MonoBehaviour
     StreamWriter writer;
     StreamReader reader;
     List<string> allData;
+    
+    public GameObject RangeGenerator;
+    RangeType GetRangeType;
 
     [Header("User Settings")]
     public string NameID;
@@ -25,7 +28,7 @@ public class TxtFileWrite : MonoBehaviour
     string msg;
 
     [Header("Python Call")]
-    public string PATH, Final;
+    public string PATH, FinalScore;
     string basePath = @"C:\Users\hscc\Desktop\MrtkTest\Assets\";
 
     void Start()
@@ -34,6 +37,11 @@ public class TxtFileWrite : MonoBehaviour
         Debug.Log("OPEN FILE: " + file.ToString());
         NowDateTime = System.DateTime.Now.ToString();
         PATH = Application.dataPath + "/" + NameID +".png" ;
+        FinalScore = "";
+
+        GetRangeType = RangeGenerator.GetComponent<RangeGeneratorManager>().RangeType;
+        Debug.Log("Type is " + GetRangeType);
+
 
     }
 
@@ -59,6 +67,8 @@ public class TxtFileWrite : MonoBehaviour
             }
 
         }
+
+
         if((ButtonInteraction.PosState == PosButtonType.DONE) && (DoneFlag == true))
         {
             DoneFlag = false;
@@ -73,9 +83,7 @@ public class TxtFileWrite : MonoBehaviour
             }
 
             //Debug.Log("Finish Time is " + CompleteTime);
-            msg = "Date Time: " + NowDateTime +" , Name: " + NameID + " , Scale: " + ChooseScale + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance;
-            Debug.Log(msg);
-            //WriteData(msg);
+            
             
             Debug.Log("AAAAAAA");
             Invoke("ButtonSetActive", 1.0f);
@@ -92,12 +100,19 @@ public class TxtFileWrite : MonoBehaviour
                 CallPythonOpenCV(basePath+ "GetScore.py", PATH);
             }*/
 
+            if(GetRangeType == RangeType.L)
+            {
+                Invoke("NoAuguCallPythonLVersion", 7.0f);
+            }
+            else
+            {
+                Invoke("NoAuguCallPython", 7.0f);   
+            }
 
-            Invoke("NoAuguCallPython", 10.0f);
 
             
 
-
+            
         }
     
 
@@ -184,14 +199,37 @@ public class TxtFileWrite : MonoBehaviour
         if (string.IsNullOrEmpty(e.Data)==false)
         {
             Debug.Log("Score is " + e.Data);
-            Final = e.Data;
-            Debug.Log("Type is " + e.Data.GetType());
+            FinalScore = e.Data;
+            Debug.Log("FinalScore is " + FinalScore);
+        
         }
     }
 
     void NoAuguCallPython()
     {
         CallPythonOpenCV(basePath+ "GetScore.py", PATH);
+
+        if(FinalScore != "")
+        {
+            msg = "Date Time: " + NowDateTime +" , Name: " + NameID + " , Scale: " + ChooseScale + " , RangeType: " + GetRangeType
+            + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance + " Score: " + FinalScore      ;
+            Debug.Log(msg);
+            WriteData(msg);
+        }   
+    }
+
+
+    void NoAuguCallPythonLVersion()
+    {
+        CallPythonOpenCV(basePath+ "GetScoreL.py", PATH);
+
+        if(FinalScore != "")
+        {
+            msg = "Date Time: " + NowDateTime +" , Name: " + NameID + " , Scale: " + ChooseScale + " , RangeType: " + GetRangeType
+            + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance + " Score: " + FinalScore      ;
+            Debug.Log(msg);
+            WriteData(msg);
+        }   
     }
     
     

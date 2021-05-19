@@ -6,7 +6,7 @@ using UnityEngine;
 public enum RangeType
 {
     Fat,
-    Tall
+    L
 };
 
 public class RangeGeneratorManager : MonoBehaviour
@@ -44,7 +44,17 @@ public class RangeGeneratorManager : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
 
-        lineRenderer.SetVertexCount(5);
+
+        if(RangeType == RangeType.L)
+        {
+            lineRenderer.SetVertexCount(7);
+        }
+        else if(RangeType == RangeType.Fat)
+        {
+            lineRenderer.SetVertexCount(5);   
+        }
+
+
 
         Ray ray = new Ray(Obj1.transform.position, Obj2.transform.position - Obj1.transform.position);
         RaycastHit hit; 
@@ -70,13 +80,15 @@ public class RangeGeneratorManager : MonoBehaviour
                     lineRenderer.SetPosition(3, StartPoint + new Vector3( 0, 1.0f, 0));
                     lineRenderer.SetPosition(4, StartPoint);
                 }
-                else if(RangeType == RangeType.Tall)
+                else if(RangeType == RangeType.L)
                 {
                     lineRenderer.SetPosition(0, StartPoint);
                     lineRenderer.SetPosition(1, StartPoint - new Vector3( 1.0f, 0, 0));
                     lineRenderer.SetPosition(2, StartPoint - new Vector3( 1.0f, -2.0f, 0));
-                    lineRenderer.SetPosition(3, StartPoint + new Vector3( 0, 2.0f, 0));
-                    lineRenderer.SetPosition(4, StartPoint);   
+                    lineRenderer.SetPosition(3, StartPoint - new Vector3( 0.5f, -2.0f, 0));
+                    lineRenderer.SetPosition(4, StartPoint - new Vector3( 0.5f, -1.0f, 0));
+                    lineRenderer.SetPosition(5, StartPoint + new Vector3( 0, 1.0f, 0));
+                    lineRenderer.SetPosition(6, StartPoint);   
                 }
 
                 
