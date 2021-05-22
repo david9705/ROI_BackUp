@@ -6,7 +6,8 @@ using UnityEngine;
 public enum RangeType
 {
     Fat,
-    L
+    L,
+    L_Fat
 };
 
 public class RangeGeneratorManager : MonoBehaviour
@@ -30,6 +31,11 @@ public class RangeGeneratorManager : MonoBehaviour
     [SerializeField]
     public RangeType RangeType;
 
+    public GameObject ClearManager;
+    private bool LocalClear = false;
+
+    Vector3 StartPoint;
+
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +50,8 @@ public class RangeGeneratorManager : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
 
+        LocalClear = ClearManager.GetComponent<ClearAll>().clear;
+
 
         if(RangeType == RangeType.L)
         {
@@ -53,6 +61,10 @@ public class RangeGeneratorManager : MonoBehaviour
         {
             lineRenderer.SetVertexCount(5);   
         }
+        else if(RangeType == RangeType.L_Fat)
+        {
+            lineRenderer.SetVertexCount(7);   
+        }
 
 
 
@@ -61,42 +73,54 @@ public class RangeGeneratorManager : MonoBehaviour
         float distance = 100.0f;
         Physics.Raycast(ray, out hit, distance); 
 
-        if ((hit.transform != null) &&(hit.transform.name.Contains(Contain_String)))
+        if ((hit.transform != null) &&(hit.transform.name.Contains(Contain_String)) && (SquareFlag == true))
         {
             Debug.Log("CAMERAAAAAAA   Blocked by : " + hit.transform.name);
             //Debug.Log("Point is " + hit.point);
             //Debug.Log("NORMAL is " + hit.normal);
             //Debug.DrawRay(Obj1.transform.position, hit.normal, Color.white);
 
-            Vector3 StartPoint = hit.point - new Vector3(0f, 0f, 0.01f);
-            /* Start to Draw the Square*/
-            if(SquareFlag == true)
+            StartPoint = hit.point - new Vector3(0f, 0f, 0.03f);
+            
+
+
+        }
+        /* Start to Draw the Square*/
+        if((SquareFlag == true) ||(LocalClear == true))
+        {
+            if(RangeType == RangeType.Fat)
             {
-                if(RangeType == RangeType.Fat)
-                {
-                    lineRenderer.SetPosition(0, StartPoint);
-                    lineRenderer.SetPosition(1, StartPoint - new Vector3( 2.0f, 0, 0));
-                    lineRenderer.SetPosition(2, StartPoint - new Vector3( 2.0f, -1.0f, 0));
-                    lineRenderer.SetPosition(3, StartPoint + new Vector3( 0, 1.0f, 0));
-                    lineRenderer.SetPosition(4, StartPoint);
-                }
-                else if(RangeType == RangeType.L)
-                {
-                    lineRenderer.SetPosition(0, StartPoint);
-                    lineRenderer.SetPosition(1, StartPoint - new Vector3( 1.0f, 0, 0));
-                    lineRenderer.SetPosition(2, StartPoint - new Vector3( 1.0f, -2.0f, 0));
-                    lineRenderer.SetPosition(3, StartPoint - new Vector3( 0.5f, -2.0f, 0));
-                    lineRenderer.SetPosition(4, StartPoint - new Vector3( 0.5f, -1.0f, 0));
-                    lineRenderer.SetPosition(5, StartPoint + new Vector3( 0, 1.0f, 0));
-                    lineRenderer.SetPosition(6, StartPoint);   
-                }
+                lineRenderer.SetPosition(0, StartPoint);
+                lineRenderer.SetPosition(1, StartPoint - new Vector3( 2.0f, 0, 0));
+                lineRenderer.SetPosition(2, StartPoint - new Vector3( 2.0f, -1.0f, 0));
+                lineRenderer.SetPosition(3, StartPoint + new Vector3( 0, 1.0f, 0));
+                lineRenderer.SetPosition(4, StartPoint);
+            }
+            else if(RangeType == RangeType.L)
+            {
+                lineRenderer.SetPosition(0, StartPoint);
+                lineRenderer.SetPosition(1, StartPoint + new Vector3( 0.5f, 0, 0));
+                lineRenderer.SetPosition(2, StartPoint + new Vector3( 0.5f, -1.0f, 0));
+                lineRenderer.SetPosition(3, StartPoint + new Vector3( -0.5f, -1.0f, 0));
+                lineRenderer.SetPosition(4, StartPoint + new Vector3( -0.5f, 1.0f, 0));
+                lineRenderer.SetPosition(5, StartPoint + new Vector3( 0, 1.0f, 0));
+                lineRenderer.SetPosition(6, StartPoint);   
+            }
+            else if(RangeType == RangeType.L_Fat)
+            {
+                lineRenderer.SetPosition(0, StartPoint);
+                lineRenderer.SetPosition(1, StartPoint + new Vector3( 1.0f, 0, 0));
+                lineRenderer.SetPosition(2, StartPoint + new Vector3( 1.0f, -0.5f, 0));
+                lineRenderer.SetPosition(3, StartPoint + new Vector3( -1.0f, -0.5f, 0));
+                lineRenderer.SetPosition(4, StartPoint + new Vector3( -1.0f, 0.5f, 0));
+                lineRenderer.SetPosition(5, StartPoint + new Vector3( 0, 0.5f, 0));
+                lineRenderer.SetPosition(6, StartPoint);   
+                   
+            }
 
                 
 
-                SquareFlag = false;
-            }
-
-
+            SquareFlag = false;
         }
 
 
