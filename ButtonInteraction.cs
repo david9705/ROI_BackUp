@@ -11,7 +11,8 @@ public enum PosButtonType
 {
     PLACE,
     DELETE,
-    CANCEL
+    CANCEL,
+    DONE
 };
 
 public class ButtonInteraction : Button
@@ -23,8 +24,13 @@ public class ButtonInteraction : Button
     
 
     public GameObjEvent OnMyButtonClicked;
-    //public bool Pos = true ;
-    
+
+    /*  Pass the Button out*/
+    public ButtonStateEnum NowButtonState;
+ 
+    [Header("Clear Setting")]
+    public GameObject ClearManager;
+    private bool LocalClear = false;
     
 
 
@@ -36,15 +42,24 @@ public class ButtonInteraction : Button
         //Pos = false;  /*Debug.Log(go.name + " got clicked");*/
         
     }
-    /*
+    
     void Update()
     {
-        
-    }*/
+        //Debug.Log(/*this.name + */" button STATE is " + PosState);
+        NowButtonState = ButtonState;
+
+        LocalClear = ClearManager.GetComponent<ClearAll>().clear;
+        //Debug.Log("LLLLL: " + LocalClear);
+        if(LocalClear == true)
+        {
+            PosState = PosButtonType.CANCEL;
+        }
+    }
     
     public void Debugger(GameObject go)
     {
         //Debug.Log("AAAA");
+        Debug.Log("Button State : "+ ButtonState);
 
         if(this.name == "PlaceButton")
         {
@@ -59,7 +74,12 @@ public class ButtonInteraction : Button
         else if(this.name == "CancelButton")
         {
             PosState = PosButtonType.CANCEL;
-            //Debug.Log("CCCCCCCC");
+            Debug.Log("CCCCCCCC");
+        }
+        else if(this.name == "DoneButton")
+        {
+            PosState = PosButtonType.DONE;
+            Debug.Log("DDDONE");
         }
 
         print("State is " + PosState);
