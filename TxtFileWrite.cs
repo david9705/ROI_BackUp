@@ -31,6 +31,11 @@ public class TxtFileWrite : MonoBehaviour
     public string PATH, FinalScore;
     string basePath = @"C:\Users\hscc\Desktop\MrtkTest\Assets\";
 
+    [Header("Clear Setting")]
+    public GameObject ClearManager;
+    private bool LocalClear = false;
+
+
     void Start()
     {
         FileInfo file = new FileInfo(Application.dataPath + "/mytxt.txt");
@@ -39,8 +44,7 @@ public class TxtFileWrite : MonoBehaviour
         PATH = Application.dataPath + "/" + NameID +".png" ;
         FinalScore = "";
 
-        GetRangeType = RangeGenerator.GetComponent<RangeGeneratorManager>().RangeType;
-        Debug.Log("Type is " + GetRangeType);
+        
 
 
     }
@@ -48,6 +52,11 @@ public class TxtFileWrite : MonoBehaviour
 
     void Update()
     {
+        GetRangeType = RangeGenerator.GetComponent<RangeGeneratorManager>().RangeType;
+        Debug.Log("Type is " + GetRangeType);
+
+
+
         if((SizeButtonCollection.SizeButtonState != SizeButtonType.NULLL) && (StartFlag == true)) 
         {
             StartFlag = false;
@@ -85,20 +94,14 @@ public class TxtFileWrite : MonoBehaviour
             //Debug.Log("Finish Time is " + CompleteTime);
             
             
-            Debug.Log("AAAAAAA");
-            Invoke("ButtonSetActive", 1.0f);
+            //Debug.Log("AAAAAAA");
+            Invoke("ButtonSetInActive", 1.0f);
 
-            Debug.Log("BBBBBBB");
+            //Debug.Log("BBBBBBB");
             Invoke("CapturePicture", 5.0f);
 
 
            
-
-            /*if (System.IO.File.Exists(PATH))
-            {
-                //Invoke("JustDelay", 5.0f);
-                CallPythonOpenCV(basePath+ "GetScore.py", PATH);
-            }*/
 
             if(GetRangeType == RangeType.L)
             {
@@ -109,11 +112,24 @@ public class TxtFileWrite : MonoBehaviour
                 Invoke("NoAuguCallPython", 7.0f);   
             }
 
-
             
 
             
         }
+
+
+        LocalClear = ClearManager.GetComponent<ClearAll>().clear;
+        //Debug.Log("LLLLL: " + LocalClear);
+        if(LocalClear == true)
+        {
+            DoneFlag = true;
+            StartFlag = true;
+            FinalScore = "";
+            //Debug.Log("LLLLL");
+            Invoke("ButtonSetActive", 0.5f);
+
+        }
+
     
 
     }
@@ -141,12 +157,22 @@ public class TxtFileWrite : MonoBehaviour
         ScreenCapture.CaptureScreenshot(Application.dataPath + "/" + NameID +".png"); 
     }
 
-    void ButtonSetActive()
+    void ButtonSetInActive()
     {
         int ChildCount = PosButtonCollection.transform.childCount;
         for(int i = 0; i < ChildCount; i ++)
         {
             PosButtonCollection.gameObject.transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+
+    void ButtonSetActive()
+    {
+        int ChildCount = PosButtonCollection.transform.childCount;
+        //Debug.Log("BBBBBBBButton Set Active: " + ChildCount);
+        for(int i = 0; i < ChildCount; i ++)
+        {
+            PosButtonCollection.gameObject.transform.GetChild(i).gameObject.SetActive(true);
         }
     }
 
