@@ -13,6 +13,8 @@ public class LightPartEnable : MonoBehaviour
     int PMChildCount, CollisionNum;
     bool LineValid;
 
+    LightPathorNot localLightPathType;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,37 +25,77 @@ public class LightPartEnable : MonoBehaviour
     void Update()
     {
         PMChildCount = this.transform.childCount;
+        localLightPathType = this.GetComponent<ClonePlane>().LightPathorNot;
+        Debug.Log("LightPath Type: " + localLightPathType);
         //LineValid = this.GetComponent<ClonePlane>().LineCollision;
         //CollisionNum = this.GetComponent<ClonePlane>().LineCollisionNum;
-        Debug.Log("Line ID: " + LineValid + " NUM: " + CollisionNum);
+        //Debug.Log("Line ID: " + LineValid + " NUM: " + CollisionNum);
 
-        for(int i = 0; i < PMChildCount; i ++)
+
+        if(ButtonInteraction.PosState == PosButtonType.DONE)
         {
-            bool val = this.gameObject.transform.GetChild(i).gameObject.GetComponent<DroneSizeButtonDistance>().DroneValid;
-            if((val == false) && (i > 0) /*||( (i > 0) && CollisionNum != -1 (LineValid == false))*/ )
+            ALLLightSetActive(PMChildCount);
+        }
+
+
+
+        if((localLightPathType == LightPathorNot.LightPathOff) && (ButtonInteraction.PosState != PosButtonType.DONE) && (PMChildCount > 1))
+        {
+            //Debug.Log("OOOFFFFFFFFFF");
+            ALLLightSetNOTActive(PMChildCount) ;   
+        }
+        else if(localLightPathType == LightPathorNot.LightPathOn)
+        {//Debug.Log("OoooooNNNN");
+            for(int i = 0; i < PMChildCount; i ++)
             {
-                LightSetNOTActive(i);
+                bool val = this.gameObject.transform.GetChild(i).gameObject.GetComponent<DroneSizeButtonDistance>().DroneValid;
+                if((val == false) && (i > 0) /*||( (i > 0) && CollisionNum != -1 (LineValid == false))*/ )
+                {
+                    LightSetNOTActive(i);
+                    //if(CollisionNum >= 0) LightSetNOTActive(CollisionNum);
+                    //Debug.Log("FFFFFF: " + i );
+                }
+                else if((val == true) && (i > 0 ) /*&& (LineValid == true)*/) 
+                {
+                    LightSetActive(i);
+                    //Debug.Log("OOOOOO: " + i);
+                }
+
+            
+
+                //Debug.Log("i: " + i + "  CurrentNotValidNum: " +this.gameObject.transform.GetChild(i).gameObject.GetComponent<DroneSizeButtonDistance>().DroneValid);
+
+
+            }
+        }
+        
+        //for(int i = 0; i < PMChildCount; i ++)
+        //{
+          //  bool val = this.gameObject.transform.GetChild(i).gameObject.GetComponent<DroneSizeButtonDistance>().DroneValid;
+            //if((val == false) && (i > 0) /*||( (i > 0) && CollisionNum != -1 (LineValid == false))*/ )
+            //{
+              //  LightSetNOTActive(i);
                 //if(CollisionNum >= 0) LightSetNOTActive(CollisionNum);
-                Debug.Log("FFFFFF");
-            }
-            else if((val == true) && (i > 0 ) /*&& (LineValid == true)*/) 
-            {
-                LightSetActive(i);
-                Debug.Log("OOOOOO");
-            }
+                //Debug.Log("FFFFFF: " + i );
+            //}
+            //else if((val == true) && (i > 0 ) /*&& (LineValid == true)*/) 
+            //{
+              //  LightSetActive(i);
+                //Debug.Log("OOOOOO: " + i);
+            //}
 
            
 
-            Debug.Log("i: " + i + "  CurrentNotValidNum: " +this.gameObject.transform.GetChild(i).gameObject.GetComponent<DroneSizeButtonDistance>().DroneValid);
+            //Debug.Log("i: " + i + "  CurrentNotValidNum: " +this.gameObject.transform.GetChild(i).gameObject.GetComponent<DroneSizeButtonDistance>().DroneValid);
 
 
-        }
+        //}
 
     }
 
     void LightSetNOTActive(int DroneNum)
     {
-        for(int i = (DroneNum - 1) * 15; i < DroneNum * 15; i ++)
+        for(int i = (DroneNum - 1) * 19; i < DroneNum * 19; i ++)
         {
             LightManager.transform.GetChild(i).gameObject.SetActive(false);
         }
@@ -61,9 +103,28 @@ public class LightPartEnable : MonoBehaviour
 
     void LightSetActive(int DroneNum)
     {
-        for(int i = (DroneNum - 1) * 15; i < DroneNum * 15; i ++)
+        for(int i = (DroneNum - 1) * 19; i < DroneNum * 19; i ++)
         {
             LightManager.transform.GetChild(i).gameObject.SetActive(true);
         }
     }
+
+    void ALLLightSetNOTActive(int DroneNum)
+    {
+        for(int i = 0; i < (DroneNum - 1 ) * 19; i ++)
+        {
+            LightManager.transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+
+
+    void ALLLightSetActive(int DroneNum)
+    {
+        for(int i = 0; i < (DroneNum - 1 ) * 19; i ++)
+        {
+            LightManager.transform.GetChild(i).gameObject.SetActive(true);
+        }
+    }
+
+
 }
