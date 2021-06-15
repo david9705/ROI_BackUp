@@ -4,10 +4,19 @@ using UnityEngine;
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.Buttons;
 
+public enum LightPathorNot
+{
+    LightPathOn,
+    LightPathOff
+};
+
 
 
 public class ClonePlane : MonoBehaviour
 {
+    [SerializeField]
+    public LightPathorNot LightPathorNot;
+
     
 
     [Header("About Plane Settings")]
@@ -253,7 +262,7 @@ public class ClonePlane : MonoBehaviour
                 Ray ray = new Ray(Obj1.transform.position, Obj2.transform.position - Obj1.transform.position);
                 RaycastHit hit; 
 
-                Debug.Log( i + " -> " + (i+1) + " distance : " + Vector3.Distance(Obj1.transform.position, Obj2.transform.position));
+                //Debug.Log( i + " -> " + (i+1) + " distance : " + Vector3.Distance(Obj1.transform.position, Obj2.transform.position));
                 float distance = Vector3.Distance(Obj1.transform.position, Obj2.transform.position) - 0.1f;
 
                 Physics.Raycast(ray, out hit, distance, mask); 
