@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 using Debug = UnityEngine.Debug;
 
+// This script contain 1. Screen Shoot 2. Write File 3. Connect to Python (OpenCV),  and python file is in Asset
+
 
 public class TxtFileWrite : MonoBehaviour
 {
@@ -16,6 +18,11 @@ public class TxtFileWrite : MonoBehaviour
     
     public GameObject RangeGenerator;
     RangeType GetRangeType;
+
+    [Header("Light Path Setting")]
+    LightPathorNot localLightPathType;
+    public float FullDistance = 40.0f;
+   
 
     [Header("User Settings")]
     public string NameID;
@@ -41,7 +48,7 @@ public class TxtFileWrite : MonoBehaviour
         FileInfo file = new FileInfo(Application.dataPath + "/mytxt.txt");
         Debug.Log("OPEN FILE: " + file.ToString());
         NowDateTime = System.DateTime.Now.ToString();
-        PATH = Application.dataPath + "/" + NameID +".png" ;
+        //PATH = Application.dataPath + "/" + NameID +".png" ;
         FinalScore = "";
 
         
@@ -53,6 +60,7 @@ public class TxtFileWrite : MonoBehaviour
     void Update()
     {
         GetRangeType = RangeGenerator.GetComponent<RangeGeneratorManager>().RangeType;
+        localLightPathType = PM.GetComponent<ClonePlane>().LightPathorNot;
         Debug.Log("Type is " + GetRangeType);
 
 
@@ -80,6 +88,8 @@ public class TxtFileWrite : MonoBehaviour
 
         if((ButtonInteraction.PosState == PosButtonType.DONE) && (DoneFlag == true))
         {
+            PATH = Application.dataPath + "/" + NameID + "_"+ GetRangeType + "_" + ChooseScale +".png" ;
+
             DoneFlag = false;
             DoneTime = Time.time;
             CompleteTime = DoneTime - StartTime;
@@ -100,9 +110,37 @@ public class TxtFileWrite : MonoBehaviour
             //Debug.Log("BBBBBBB");
             Invoke("CapturePicture", 5.0f);
 
+            /*
+            if(localLightPathType == LightPathorNot.LightPathOff)
+            {
+                if(distance >= FullDistance)
+                {
+                    FinalScore = "76.18561";
+                }
+                else
+                {
+                    FinalScore = ((distance/FullDistance) * 100).ToString("0.0000");
+                }
 
-           
-
+                
+                Debug.Log("OFF is " + FinalScore);
+                msg = "Date Time: " + NowDateTime +" , Name: " + NameID + " , Scale: " + ChooseScale + " , RangeType: " + GetRangeType
+                + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance + " Score: " + FinalScore + ", PathType: " + localLightPathType ;
+                Debug.Log(msg);
+                WriteData(msg);
+            }
+            else
+            {
+                if(GetRangeType == RangeType.L)
+                {
+                    Invoke("NoAuguCallPythonLVersion", 7.0f);
+                }
+                else
+                {
+                    Invoke("NoAuguCallPython", 7.0f);   
+                }
+            }*/
+            
             if(GetRangeType == RangeType.L)
             {
                 Invoke("NoAuguCallPythonLVersion", 7.0f);
@@ -154,7 +192,8 @@ public class TxtFileWrite : MonoBehaviour
 
     void CapturePicture()
     {
-        ScreenCapture.CaptureScreenshot(Application.dataPath + "/" + NameID +".png"); 
+    
+        ScreenCapture.CaptureScreenshot(Application.dataPath + "/" + NameID + "_"+ GetRangeType + "_" + ChooseScale +".png"); 
     }
 
     void ButtonSetInActive()
@@ -238,7 +277,7 @@ public class TxtFileWrite : MonoBehaviour
         if(FinalScore != "")
         {
             msg = "Date Time: " + NowDateTime +" , Name: " + NameID + " , Scale: " + ChooseScale + " , RangeType: " + GetRangeType
-            + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance + " Score: " + FinalScore      ;
+            + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance + " Score: " + FinalScore + ", PathType: " + localLightPathType      ;
             Debug.Log(msg);
             WriteData(msg);
         }   
@@ -252,7 +291,7 @@ public class TxtFileWrite : MonoBehaviour
         if(FinalScore != "")
         {
             msg = "Date Time: " + NowDateTime +" , Name: " + NameID + " , Scale: " + ChooseScale + " , RangeType: " + GetRangeType
-            + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance + " Score: " + FinalScore      ;
+            + " , Time: " + CompleteTime + " , WayPoint: " + WayPointNum + " , Distance: " + distance + " Score: " + FinalScore + ", PathType: " + localLightPathType      ;
             Debug.Log(msg);
             WriteData(msg);
         }   
