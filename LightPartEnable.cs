@@ -10,7 +10,7 @@ public class LightPartEnable : MonoBehaviour
     private int CurrentNotValidNum;
     public GameObject LightManager;
 
-    int PMChildCount, CollisionNum;
+    int PMChildCount, CollisionNum, LMChildCount;
     bool LineValid;
 
     LightPathorNot localLightPathType;
@@ -24,6 +24,8 @@ public class LightPartEnable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        LMChildCount = LightManager.transform.childCount;
+        Debug.Log("Light Count: " + LMChildCount);
         PMChildCount = this.transform.childCount;
         localLightPathType = this.GetComponent<ClonePlane>().LightPathorNot;
         Debug.Log("LightPath Type: " + localLightPathType);
@@ -34,7 +36,7 @@ public class LightPartEnable : MonoBehaviour
 
         if(ButtonInteraction.PosState == PosButtonType.DONE)
         {
-            ALLLightSetActive(PMChildCount);
+            ALLLightSetActive(LMChildCount);
         }
 
 
@@ -42,7 +44,7 @@ public class LightPartEnable : MonoBehaviour
         if((localLightPathType == LightPathorNot.LightPathOff) && (ButtonInteraction.PosState != PosButtonType.DONE) && (PMChildCount > 1))
         {
             //Debug.Log("OOOFFFFFFFFFF");
-            ALLLightSetNOTActive(PMChildCount) ;   
+            ALLLightSetNOTActive(LMChildCount) ;   
         }
         else if(localLightPathType == LightPathorNot.LightPathOn)
         {//Debug.Log("OoooooNNNN");
@@ -111,7 +113,8 @@ public class LightPartEnable : MonoBehaviour
 
     void ALLLightSetNOTActive(int DroneNum)
     {
-        for(int i = 0; i < (DroneNum - 1 ) * 19; i ++)
+        //Debug.Log("AAAAAAALLLLLLLLLLLLL");
+        for(int i = 0; i < DroneNum ; i ++)
         {
             LightManager.transform.GetChild(i).gameObject.SetActive(false);
         }
@@ -120,7 +123,7 @@ public class LightPartEnable : MonoBehaviour
 
     void ALLLightSetActive(int DroneNum)
     {
-        for(int i = 0; i < (DroneNum - 1 ) * 19; i ++)
+        for(int i = 0; i < DroneNum ; i ++)
         {
             LightManager.transform.GetChild(i).gameObject.SetActive(true);
         }
